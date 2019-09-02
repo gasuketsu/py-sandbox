@@ -1,23 +1,25 @@
 #!/usr/bin/env python3
 
 
-_maze = ['#################################',
-        'S   #     #               #   # #',
-        '# # # ##### ########### # # # # #',
-        '# #   #     #     #     #   #   #',
-        '# ### # ####### # # #############',
-        '#   #   #     # # #       #     #',
-        '### ##### # # # # ####### # ### #',
-        '#   #   # # #   # #       #   # #',
-        '# ### # # ####### # ####### ### #',
-        '#     # #   #   # #   #     #   #',
-        '####### ### ### ### # # ##### ###',
-        '#       # #       # # #     #   #',
-        '# ####### # ### # ### ##### # ###',
-        '#   #     # #   # #   #   # #   #',
-        '### # ####### # # # # # # # ### #',
-        '#     #       # #   #   #   #   G',
-        '#################################']
+_maze = [
+    "#################################",
+    "S   #     #               #   # #",
+    "# # # ##### ########### # # # # #",
+    "# #   #     #     #     #   #   #",
+    "# ### # ####### # # #############",
+    "#   #   #     # # #       #     #",
+    "### ##### # # # # ####### # ### #",
+    "#   #   # # #   # #       #   # #",
+    "# ### # # ####### # ####### ### #",
+    "#     # #   #   # #   #     #   #",
+    "####### ### ### ### # # ##### ###",
+    "#       # #       # # #     #   #",
+    "# ####### # ### # ### ##### # ###",
+    "#   #     # #   # #   #   # #   #",
+    "### # ####### # # # # # # # ### #",
+    "#     #       # #   #   #   #   G",
+    "#################################",
+]
 
 
 def setup_maze():
@@ -33,20 +35,31 @@ def display(maze):
 
 
 def is_goal(maze, pos):
-    return True if maze[pos[0]][pos[1]] == 'G' else False
+    return True if maze[pos[0]][pos[1]] == "G" else False
 
 
 def mark(maze, pos):
-    maze[pos[0]][pos[1]] = '.'
+    maze[pos[0]][pos[1]] = "."
 
 
 def mark_goal(maze, pos):
-    maze[pos[0]][pos[1]] = '@'
+    maze[pos[0]][pos[1]] = "@"
+
+
+def find_start(maze):
+    r = 0
+    for row in maze:
+        c = 0
+        for column in row:
+            if column == "S":
+                return (r, c)
+            c += 1
+        r += 1
 
 
 def is_unexplored_path(maze, pos):
     if pos[0] >= 0 and pos[1] >= 0:
-        if maze[pos[0]][pos[1]] == ' ' or is_goal(maze, pos):
+        if maze[pos[0]][pos[1]] == " " or is_goal(maze, pos):
             return True
     return False
 
@@ -72,23 +85,26 @@ def explore(maze, pos):
         mark_goal(maze, pos)
         return True
     mark(maze, pos)
-    if is_unexplored_path(maze, go_right(pos)) and explore(maze, go_right(pos)):     # Right
+    if is_unexplored_path(maze, go_right(pos)) and explore(
+        maze, go_right(pos)
+    ):  # Right
         return True
-    elif is_unexplored_path(maze, go_up(pos)) and explore(maze, go_up(pos)):         # Up
+    elif is_unexplored_path(maze, go_up(pos)) and explore(maze, go_up(pos)):  # Up
         return True
-    elif is_unexplored_path(maze, go_left(pos)) and explore(maze, go_left(pos)):     # Left
+    elif is_unexplored_path(maze, go_left(pos)) and explore(maze, go_left(pos)):  # Left
         return True
-    elif is_unexplored_path(maze, go_down(pos)) and explore(maze, go_down(pos)):     # Down
+    elif is_unexplored_path(maze, go_down(pos)) and explore(maze, go_down(pos)):  # Down
         return True
     else:
         return False
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     maze = setup_maze()
-    if explore(maze, (1, 0)):  # Assuming (1, 0) is Start
+    s = find_start(maze)
+    print(s)
+    if explore(maze, s):
         # Found path to goal
         display(maze)
     else:
         print("No route to Goal")
-
